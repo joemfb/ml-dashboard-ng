@@ -1,0 +1,19 @@
+<div class="ml-dashboard payor-dashboard">
+  <!-- TODO: remove .payor-dashboard -->
+  <div class="row">
+
+    <div class="col-xs-12 ml-dashboard-header payor-header">
+      <!-- TODO: remove .payor-header -->
+      <h3 class="pagetitle">Dashboard</h3>
+      <button ng-click="addWidget()" class="btn btn btn-xs btn-default">Add <i class="fa fa-plus"></i></button>
+      <button ng-click="saveWidgets()" class="btn btn btn-xs btn-default">Save <i class="fa fa-save"></i></button>
+    </div>
+
+    <div class="col-xs-12">
+      <div ml-dashboard-widget="widget"
+           ng-repeat="widget in widgets"
+           constraints="constraints"
+           suggest="suggest"
+           remove-widget="removeWidget($index)"></div>
+  </div>
+</div>
