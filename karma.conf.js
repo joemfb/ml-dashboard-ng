@@ -18,10 +18,11 @@ module.exports = function(config) {
       'bower_components/angular/angular.js',
       'bower_components/lodash/dist/lodash.min.js',
       'bower_components/ml-common-ng/dist/ml-common-ng.js',
-      'bower_components/ml-common-ng/dist/ml-search-ng.js',
+      'bower_components/ml-search-ng/dist/ml-search-ng.js',
 
       // App under test
       'src/ml-dashboard.js',
+      'src/**.js',
 
       // Mocks
       'bower_components/angular-mocks/angular-mocks.js',
