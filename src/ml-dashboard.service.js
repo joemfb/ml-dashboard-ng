@@ -5,9 +5,9 @@
   angular.module('ml.dashboard')
     .factory('MLDashboardService', MLDashboardService);
 
-  MLDashboardService.$inject = ['$http', 'MLSearchFactory'];
+  MLDashboardService.$inject = ['$http', 'MLSearchFactory','MLRest'];
 
-  function MLDashboardService($http, MLSearchFactory) {
+  function MLDashboardService($http, MLSearchFactory, mlRest) {
     var mlSearch = MLSearchFactory.newContext();
     var service = {
       getTuples: getTuples
@@ -58,7 +58,7 @@
         }
       });
 
-      var options  = {
+      var combinedQuery  = {
         search: {
           query: mlSearch.getQuery(),
           options: {
@@ -68,11 +68,13 @@
         }
       };
 
-      var url = '/v1/values/payordash?format=json';
-      if (limit) {
-        url = url + '&limit=' + limit;
+      var params = { format: 'json' }
+
+      if ( limit ) {
+        params.limit = limit;
       }
-      return $http.post(url, options).then(function(data) {
+
+      return mlRest.values('payordash', params, combinedQuery).then(function(data) {
         return data.data;
       });
     }
