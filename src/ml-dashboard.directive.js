@@ -23,7 +23,7 @@
 
   MLDashboardCtrl.$inject = ['$scope', 'MLRest']; //, 'MLDashboardService'
 
-  function MLDashboardCtrl($scope, MLRest) { //, payorService
+  function MLDashboardCtrl($scope, mLRest) { //, payorService
 
     angular.extend($scope, {
       addWidget: addWidget,
@@ -32,6 +32,32 @@
       suggest: suggest,
       widgets: []
     });
+
+    (function init() {
+      getWidgets();
+      groupConstraints();
+
+      console.log( $scope.constraints )
+      console.log( $scope.groupedConstraints )
+    })();
+
+    function groupConstraints() {
+      $scope.groupedConstraints = $scope.groupedConstraints || {};
+
+      _.each($scope.constraints, function(constraint) {
+        var tokens = constraint.name.split('_'),
+            group = tokens[0];
+
+        constraint.ext = {
+          prettyName: tokens.join(' '),
+          extraPrettyName: tokens[1]
+        };
+
+        $scope.groupedConstraints[ group ] = $scope.groupedConstraints[ group ] || [];
+        $scope.groupedConstraints[ group ].push( constraint );
+        constraint.name.replace(/_/g, ' ');
+      });
+    }
 
     function addWidget() {
       $scope.widgets.push({
@@ -48,23 +74,25 @@
     }
 
     function saveWidgets() {
-      MLRest.updateDocument($scope.widgets, {
+      mLRest.updateDocument($scope.widgets, {
         uri: '/widgets/widget.json',
         collection: 'widgets'
       });
     }
 
-    MLRest.getDocument('/widgets/widget.json').then(function(resp) {
-      var widgets = resp.data || [];
+    function getWidgets() {
+      mLRest.getDocument('/widgets/widget.json').then(function(resp) {
+        var widgets = resp.data || [];
 
-      _.each(widgets, function(widget) {
-        widget.dimensions = _.map(widget.dimensions, function(dimension) {
-          return _.find($scope.constraints, function(constraint) { return constraint.name === dimension.name; });
+        _.each(widgets, function(widget) {
+          widget.dimensions = _.map(widget.dimensions, function(dimension) {
+            return _.find($scope.constraints, function(constraint) { return constraint.name === dimension.name; });
+          });
         });
-      });
 
-      $scope.widgets = widgets;
-    });
+        $scope.widgets = widgets;
+      });
+    }
 
     function suggest(constraint, val) {
       var params = {
@@ -92,7 +120,7 @@
           }
         }
       };
-      return MLRest.suggest(params, combined).then(function(res) {
+      return mLRest.suggest(params, combined).then(function(res) {
         return res.data.suggestions || [];
       });
     }

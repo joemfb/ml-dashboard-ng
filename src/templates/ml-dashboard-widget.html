@@ -96,6 +96,13 @@
                   {{dimension.prettyName || 'Choose Dimension'}} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
+                  <li ng-repeat-start="(group, gConstraints) in groupedConstraints" class="section dropdown-header">{{ group }}</li>
+                  <li ng-repeat="constraint in gConstraints">
+                    <a href ng-click="selectDimension($parent.$index, constraint)">{{ constraint.ext.extraPrettyName }}</a>
+                  </li>
+                  <li ng-repeat-end class="divider"></li>
+                  <!--
+
                   <li class="section">All</li>
                   <li ng-repeat="constraint in constraints | filter:'All_'"><a href ng-click="selectDimension($parent.$index, constraint)">{{constraint.extraPrettyName}}</a></li>
                   <li class="divider"></li>
@@ -107,6 +114,7 @@
                   <li class="divider"></li>
                   <li class="section">Claims</li>
                   <li ng-repeat="constraint in constraints | filter:'Claim_'"><a href ng-click="selectDimension($parent.$index, constraint)">{{constraint.extraPrettyName}}</a></li>
+                  -->
                 </ul>
               </div>
               &nbsp;

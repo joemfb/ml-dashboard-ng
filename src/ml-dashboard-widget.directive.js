@@ -13,6 +13,7 @@
       scope: {
         widget: '=mlDashboardWidget',
         constraints: '=',
+        groupedConstraints: '=',
         suggest: '=',
         removeWidget: '&'
       },
